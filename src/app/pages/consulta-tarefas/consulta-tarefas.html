@@ -1,0 +1,180 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+      <h6 class="m-0 font-weight-bold text-primary">
+        Consulta de Tarefas
+      </h6>
+      <div>
+        <a routerLink="/cadastro-tarefas" class="btn btn-success btn-sm me-2">
+          <i class="fas fa-plus-circle"></i> Nova Tarefa
+        </a>
+        <button class="btn btn-info btn-sm" (click)="recarregarDados()">
+          <i class="fas fa-sync-alt"></i> Atualizar
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      
+      <!-- Filtros -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label class="form-label">Filtrar por nome:</label>
+          <input type="text" class="form-control" 
+                 [(ngModel)]="filtroNome" 
+                 (input)="aplicarFiltros()"
+                 placeholder="Digite para filtrar...">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Filtrar por prioridade:</label>
+          <select class="form-control" 
+                  [(ngModel)]="filtroPrioridade" 
+                  (change)="aplicarFiltros()">
+            <option value="">Todas</option>
+            <option value="1">BAIXA</option>
+            <option value="2">MÉDIA</option>
+            <option value="3">ALTA</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Ordenar por:</label>
+          <select class="form-control" 
+                  [(ngModel)]="ordenacao" 
+                  (change)="aplicarFiltros()">
+            <option value="nome">Nome (A-Z)</option>
+            <option value="data">Data (Recentes)</option>
+            <option value="prioridade">Prioridade</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Resultados -->
+      @if (tarefasFiltradas().length === 0) {
+        <div class="text-center py-5">
+          <i class="fas fa-tasks fa-4x text-gray-300 mb-3"></i>
+          <h4 class="text-gray-500">Nenhuma tarefa encontrada</h4>
+          <p class="text-gray-400">Cadastre sua primeira tarefa para começar!</p>
+          <a routerLink="/cadastro-tarefas" class="btn btn-primary">
+            <i class="fas fa-plus-circle"></i> Cadastrar Tarefa
+          </a>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+              <tr>
+                <th>Nome da tarefa</th>
+                <th>Data</th>
+                <th>Hora</th>
+                <th>Descrição</th>
+                <th>Prioridade</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (tarefa of tarefasFiltradas(); track $index) {
+                <tr>
+                  <td class="font-weight-bold">{{ tarefa.nome }}</td>
+                  <td>{{ formatarData(tarefa.data) }}</td>
+                  <td>{{ tarefa.hora }}</td>
+                  <td>{{ tarefa.descricao }}</td>
+                  <td>
+                    @switch (tarefa.prioridade) {
+                      @case ('1') {
+                        <span class="badge bg-success">BAIXA</span>
+                      }
+                      @case ('2') {
+                        <span class="badge bg-warning">MÉDIA</span>
+                      }
+                      @case ('3') {
+                        <span class="badge bg-danger">ALTA</span>
+                      }
+                    }
+                  </td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-sm btn-outline-primary" 
+                              (click)="editarTarefa($index)">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger ms-1" 
+                              (click)="excluirTarefa($index)">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="6" class="text-center">
+                  <div class="alert alert-info mb-0">
+                    <i class="fas fa-info-circle"></i>
+                    Exibindo {{ tarefasFiltradas().length }} de {{ todasTarefas().length }} tarefas
+                    @if (filtroNome || filtroPrioridade) {
+                      (filtradas)
+                    }
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        
+        <!-- Estatísticas -->
+        <div class="row mt-4">
+          <div class="col-md-3">
+            <div class="card border-left-primary shadow h-100 py-2">
+              <div class="card-body">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                  Total de Tarefas
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ todasTarefas().length }}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-3">
+            <div class="card border-left-danger shadow h-100 py-2">
+              <div class="card-body">
+                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                  Prioridade ALTA
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ contarPorPrioridade('3') }}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-3">
+            <div class="card border-left-warning shadow h-100 py-2">
+              <div class="card-body">
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                  Prioridade MÉDIA
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ contarPorPrioridade('2') }}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-3">
+            <div class="card border-left-success shadow h-100 py-2">
+              <div class="card-body">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                  Prioridade BAIXA
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ contarPorPrioridade('1') }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+      
+    </div>
+  </div>

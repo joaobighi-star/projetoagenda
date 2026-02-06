@@ -1,0 +1,156 @@
+<div id="wrapper">
+      
+  <!-- Sidebar -->
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" routerLink="/">
+      <div class="sidebar-brand-icon">
+        <i class="fas fa-calendar-alt"></i>
+      </div>
+      <div class="sidebar-brand-text mx-3">Agenda de Tarefas</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/painel-principal">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Painel principal</span>
+      </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      Controle de tarefas
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" 
+         data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-cog"></i>
+        <span>Minhas tarefas</span>
+      </a>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" 
+           data-bs-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Selecione a ação:</h6>
+          <a class="collapse-item" routerLink="/cadastro-tarefas">Cadastrar tarefas</a>
+          <a class="collapse-item" routerLink="/consulta-tarefas">Consultar tarefas</a>
+        </div>
+      </div>
+    </li>
+
+  </ul>
+  <!-- End of Sidebar -->
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+    
+    <!-- Main Content -->
+    <div id="content">
+      
+      <!-- Topbar -->
+      <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        
+        <!-- Sidebar Toggle (Topbar) -->
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle me-3">
+          <i class="fa fa-bars"></i>
+        </button>
+
+        
+        <!-- Topbar Navbar -->
+        <ul class="navbar-nav ms-auto">
+          <div class="topbar-divider d-none d-sm-block"></div>
+          
+          <!-- Nav Item - User Information -->
+          <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" 
+               role="button" data-bs-toggle="dropdown" aria-haspopup="true" 
+               aria-expanded="false">
+              <span class="me-2 d-none d-lg-inline text-gray-600 small">
+                Nome do Usuário
+              </span>
+            </a>
+            <!-- Dropdown - User Information -->
+            <div class="dropdown-menu dropdown-menu-end shadow animated--grow-in" 
+                 aria-labelledby="userDropdown">
+              <a class="dropdown-item" routerLink="/dados-do-usuario">
+                <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
+                Minha Conta
+              </a>
+              <a class="dropdown-item" routerLink="/alterar-senha">
+                <i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>
+                Alterar Senha
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#" data-bs-toggle="modal" 
+                 data-bs-target="#logoutModal">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>
+                Sair do Sistema
+              </a>
+            </div>
+          </li>
+        </ul>
+
+      </nav>
+      <!-- End of Topbar -->
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+        <!-- Conteúdo dos componentes será renderizado aqui -->
+        <router-outlet></router-outlet>
+      </div>
+      <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+      <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+          <span>Copyright &copy; Alef Dev 2026</span>
+        </div>
+      </div>
+    </footer>
+    <!-- End of Footer -->
+
+  </div>
+  <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" 
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Deseja sair do sistema?</h5>
+        <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Confirme para encerrar sua sessão na agenda.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <a class="btn btn-primary" routerLink="/">Confirmar</a>
+      </div>
+    </div>
+  </div>
+</div>

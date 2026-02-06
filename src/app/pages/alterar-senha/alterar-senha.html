@@ -1,0 +1,27 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Alterar Senha</h6>
+    </div>
+    <div class="card-body">
+        <form (ngSubmit)="onSubmit()">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Senha atual:</label>
+                    <input type="password" class="form-control" [(ngModel)]="senhaAtual" name="senhaAtual" required/>
+                </div>
+                <div class="col-md-4">
+                    <label>Nova senha:</label>
+                    <input type="password" class="form-control" [(ngModel)]="novaSenha" name="novaSenha" required/>
+                </div>
+                <div class="col-md-4">
+                    <label>Confirme a nova senha:</label>
+                    <input type="password" class="form-control" [(ngModel)]="confirmacaoSenha" name="confirmacaoSenha" required/>
+                </div>
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-success">
+                Salvar Alterações
+            </button>
+        </form>
+    </div>
+</div>

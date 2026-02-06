@@ -1,0 +1,192 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+      <h6 class="m-0 font-weight-bold text-primary">
+        Cadastro de Tarefas
+      </h6>
+      <a routerLink="/consulta-tarefas" class="btn btn-info btn-sm">
+        <i class="fas fa-list"></i> Ver Tarefas
+      </a>
+    </div>
+    <div class="card-body">
+      
+      <form (ngSubmit)="cadastrarTarefa()" #formTarefa="ngForm">
+        
+        <!-- Nome da Tarefa -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Nome da tarefa *</label>
+            <input type="text" class="form-control" 
+                   [(ngModel)]="novaTarefa.nome" 
+                   name="nome" 
+                   required
+                   minlength="3"
+                   #nome="ngModel">
+            
+            @if (nome.invalid && (nome.dirty || nome.touched)) {
+              <div class="text-danger small mt-1">
+                @if (nome.errors?.['required']) {
+                  <i class="fas fa-exclamation-circle"></i> Nome é obrigatório.
+                }
+                @if (nome.errors?.['minlength']) {
+                  <i class="fas fa-exclamation-circle"></i> Mínimo 3 caracteres.
+                }
+              </div>
+            }
+          </div>
+          
+          <!-- Data da Tarefa -->
+          <div class="col-md-3">
+            <label class="form-label">Data da tarefa *</label>
+            <input type="date" class="form-control" 
+                   [(ngModel)]="novaTarefa.data" 
+                   name="data" 
+                   required
+                   #data="ngModel">
+            
+            @if (data.invalid && (data.dirty || data.touched)) {
+              <div class="text-danger small mt-1">
+                <i class="fas fa-exclamation-circle"></i> Data é obrigatória.
+              </div>
+            }
+          </div>
+          
+          <!-- Hora da Tarefa -->
+          <div class="col-md-3">
+            <label class="form-label">Hora da tarefa *</label>
+            <input type="time" class="form-control" 
+                   [(ngModel)]="novaTarefa.hora" 
+                   name="hora" 
+                   required
+                   #hora="ngModel">
+            
+            @if (hora.invalid && (hora.dirty || hora.touched)) {
+              <div class="text-danger small mt-1">
+                <i class="fas fa-exclamation-circle"></i> Hora é obrigatória.
+              </div>
+            }
+          </div>
+        </div>
+        
+        <!-- Descrição e Prioridade -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Descrição da tarefa *</label>
+            <textarea class="form-control" rows="3" 
+                      [(ngModel)]="novaTarefa.descricao" 
+                      name="descricao" 
+                      required
+                      minlength="10"
+                      #descricao="ngModel"></textarea>
+            
+            @if (descricao.invalid && (descricao.dirty || descricao.touched)) {
+              <div class="text-danger small mt-1">
+                @if (descricao.errors?.['required']) {
+                  <i class="fas fa-exclamation-circle"></i> Descrição é obrigatória.
+                }
+                @if (descricao.errors?.['minlength']) {
+                  <i class="fas fa-exclamation-circle"></i> Mínimo 10 caracteres.
+                }
+              </div>
+            }
+          </div>
+          
+          <div class="col-md-3">
+            <label class="form-label">Prioridade *</label>
+            <select class="form-control" 
+                    [(ngModel)]="novaTarefa.prioridade" 
+                    name="prioridade" 
+                    required
+                    #prioridade="ngModel">
+              <option value="">Selecione...</option>
+              <option value="1">BAIXA</option>
+              <option value="2">MÉDIA</option>
+              <option value="3">ALTA</option>
+            </select>
+            
+            @if (prioridade.invalid && (prioridade.dirty || prioridade.touched)) {
+              <div class="text-danger small mt-1">
+                <i class="fas fa-exclamation-circle"></i> Prioridade é obrigatória.
+              </div>
+            }
+          </div>
+        </div>
+        
+        <!-- Botões -->
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <button type="submit" class="btn btn-success" [disabled]="formTarefa.invalid">
+              <i class="fas fa-check-circle"></i> Cadastrar Tarefa
+            </button>
+            
+            <button type="button" class="btn btn-secondary ms-2" (click)="limparFormulario()">
+              <i class="fas fa-broom"></i> Limpar
+            </button>
+            
+            <a routerLink="/painel-principal" class="btn btn-outline-primary ms-2">
+              <i class="fas fa-home"></i> Voltar ao Painel
+            </a>
+          </div>
+        </div>
+        
+      </form>
+      
+      <!-- Mensagem de Sucesso -->
+      @if (mensagemSucesso()) {
+        <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+          <i class="fas fa-check-circle"></i> 
+          <strong>Sucesso!</strong> Tarefa cadastrada com sucesso.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" 
+                  aria-label="Close" (click)="fecharMensagem()"></button>
+        </div>
+      }
+      
+      <!-- Lista de Tarefas Recentes -->
+      @if (tarefasCadastradas().length > 0) {
+        <div class="mt-5">
+          <h6 class="font-weight-bold text-primary mb-3">
+            <i class="fas fa-history"></i> Tarefas Recentes ({{ tarefasCadastradas().length }})
+          </h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Data</th>
+                  <th>Prioridade</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (tarefa of tarefasCadastradas(); track $index) {
+                  <tr>
+                    <td>{{ tarefa.nome }}</td>
+                    <td>{{ tarefa.data }} {{ tarefa.hora }}</td>
+                    <td>
+                      @switch (tarefa.prioridade) {
+                        @case ('1') {
+                          <span class="badge bg-success">BAIXA</span>
+                        }
+                        @case ('2') {
+                          <span class="badge bg-warning">MÉDIA</span>
+                        }
+                        @case ('3') {
+                          <span class="badge bg-danger">ALTA</span>
+                        }
+                      }
+                    </td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-danger" 
+                              (click)="removerTarefa($index)">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+      
+    </div>
+  </div>
