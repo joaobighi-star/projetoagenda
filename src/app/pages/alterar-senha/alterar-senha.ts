@@ -11,5 +11,13 @@ import { RouterLink, RouterModule } from '@angular/router';
   styleUrl: './alterar-senha.css',
 })
 export class AlterarSenha {
+  senhaAtual: string = '';
+  novaSenha: string = '';
+  confirmacaoSenha: string = '';
+
+  onSubmit() {
+    // Implementar lógica de alteração de senha
+    console.log('Alterar senha:', this.senhaAtual, this.novaSenha, this.confirmacaoSenha);
+  }
 
 }
